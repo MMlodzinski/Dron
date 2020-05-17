@@ -4,7 +4,7 @@ FLAGS = -Wall -pedantic -std=c++14 -iquote inc
 
 ${TRGDIR}/dron.out: ${OBJ} ${OBJ}/main.o ${OBJ}/Macierz.o ${OBJ}/Wektor3D.o\
 		${OBJ}/Obiekty.o ${OBJ}/Dron.o ${OBJ}/Dr3D_gnuplot_api.o -lpthread
-	g++ -o ${TRGDIR}zad3.out ${OBJ}/main.o ${OBJ}/Macierz.o ${OBJ}/Wektor3D.o\
+	g++ -o ${TRGDIR}dron.out ${OBJ}/main.o ${OBJ}/Macierz.o ${OBJ}/Wektor3D.o\
 		${OBJ}/Obiekty.o ${OBJ}/Dron.o ${OBJ}/Dr3D_gnuplot_api.o -lpthread
 
 ${OBJ}:
