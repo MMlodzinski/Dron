@@ -62,4 +62,33 @@ public:
 
 };
 
+class Plaszczyzna:public ObiektRysowalny{
+protected:
+    Wektor3D pozycjaSrodka;
+    double szerokosc;
+    double dlugosc;
+    double wysokosc;
+    std::vector<std::vector<drawNS::Point3D>> punkty=std::vector<std::vector<drawNS::Point3D>>(22,std::vector<drawNS::Point3D>(2,drawNS::Point3D(0,0,-5)));
+public:
+    virtual int Rysuj()=0;
+    Plaszczyzna();
+    Plaszczyzna(const Wektor3D & pozycja);
+    void Ustaw();
+};
+
+class Dno:public Plaszczyzna{
+public:
+    
+    Dno();
+    Dno(double dlugoscX,double dlugoscY);
+    int Rysuj() override;
+};
+
+class PowierzchniaWody:public Plaszczyzna{
+public:
+
+    PowierzchniaWody();
+    int Rysuj() override;
+};
+
 #endif

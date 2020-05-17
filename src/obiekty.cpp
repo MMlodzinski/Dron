@@ -76,3 +76,50 @@ Prostopadloscian::Prostopadloscian(double dlugoscX,double dlugoscY, double wysok
     this->dlugosc = dlugoscY;
     this->wysokosc = wysokosc;
 }
+
+Plaszczyzna::Plaszczyzna(const Wektor3D & pozycja){
+    this->pozycjaSrodka = pozycja;
+}
+
+Plaszczyzna::Plaszczyzna(){
+    this->pozycjaSrodka = Wektor3D();
+}
+
+
+void Plaszczyzna::Ustaw(){
+    int i;
+
+    for(i=0;i<11;i++){
+        this->punkty[i][0]= Wektor3D(-szerokosc/2+i,-dlugosc/2,-wysokosc/2);
+        this->punkty[i][1]= Wektor3D(-szerokosc/2+i,dlugosc/2,-wysokosc/2);
+    }
+
+    for(i=0;i<11;i++){
+        this->punkty[i+11][0]= Wektor3D(-szerokosc/2,-dlugosc/2+i,-wysokosc/2);
+        this->punkty[i+11][1]= Wektor3D(szerokosc/2,-dlugosc/2+i,-wysokosc/2);
+    }
+}
+
+int Dno::Rysuj(){
+    this->Ustaw();
+    if(this->id>=0)
+    {
+        drawingApi->erase_shape(this->id);
+    }
+
+    this->id = drawingApi->draw_surface(this->punkty,this->kolor);
+    drawingApi->redraw();
+    return this->id;
+}
+
+Dno::Dno(){
+    this->szerokosc=10;
+    this->dlugosc=10;
+    this->wysokosc=10;
+}
+
+PowierzchniaWody::PowierzchniaWody(){
+    this->szerokosc=10;
+    this->dlugosc=10;
+    this->wysokosc=10;
+}
