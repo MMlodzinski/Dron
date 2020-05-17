@@ -9,6 +9,7 @@
 
 template <typename STyp, int SWymiar>
 class SWektor {
+  protected:
     STyp  _Wsp[SWymiar];
   public:
     SWektor() { for (STyp &Wsp: _Wsp) Wsp = 0; }
@@ -18,7 +19,7 @@ class SWektor {
 
     SWektor<STyp,SWymiar> operator - (const SWektor<STyp,SWymiar> &Odjemnik) const;
     SWektor<STyp,SWymiar> operator * (double Mnoznik) const;
-    SWektor<STyp,SWymiar> operator + (const SWektor<STyp,SWymiar> &we);
+    SWektor<STyp,SWymiar> operator + (const SWektor<STyp,SWymiar> &we)const;
     SWektor<STyp,SWymiar> operator * (const SWektor<STyp,SWymiar> &we);
     SWektor<STyp,SWymiar> operator / (STyp liczba);
     STyp dlugosc();
@@ -45,7 +46,7 @@ SWektor<STyp,SWymiar> SWektor<STyp,SWymiar>::operator * (double Mnoznik) const
 }
 
 template <typename STyp, int SWymiar>
-SWektor<STyp,SWymiar> SWektor<STyp,SWymiar>::operator + (const SWektor<STyp,SWymiar> &we)
+SWektor<STyp,SWymiar> SWektor<STyp,SWymiar>::operator + (const SWektor<STyp,SWymiar> &we)const
 {
     SWektor<STyp,SWymiar> Wynik;
 
@@ -58,7 +59,7 @@ SWektor<STyp,SWymiar> SWektor<STyp,SWymiar>::operator * (const SWektor<STyp,SWym
 {
     SWektor<STyp,SWymiar> Wynik;
 
-    for(unsigned int Ind = 0;Ind<ROZMIAR;Ind++){
+    for(unsigned int Ind = 0;Ind<SWymiar;Ind++){
         Wynik[Ind]=we[Ind]*Wynik[Ind];
     }
     return Wynik;
@@ -69,7 +70,7 @@ SWektor<STyp,SWymiar> SWektor<STyp,SWymiar>::operator / (STyp liczba)
 {
    SWektor<STyp,SWymiar> Wynik;
 
-    for(int Ind=0;Ind<ROZMIAR;Ind++){
+    for(int Ind=0;Ind<SWymiar;Ind++){
         Wynik[Ind]=Wynik[Ind]/liczba;
     }
 }
@@ -97,7 +98,7 @@ template <typename STyp, int SWymiar>
 std::istream& operator >> (std::istream &Strm, SWektor<STyp, SWymiar> &Wek)
 {
     Strm.clear();
-    for(int i=0;i<ROZMIAR;i++){
+    for(int i=0;i<SWymiar;i++){
         if(!(Strm >> Wek[i])) Strm.setstate(std::ios::failbit);
     }
     return Strm;

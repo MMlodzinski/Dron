@@ -1,11 +1,14 @@
 #ifndef WEKTOR3D_HH
 #define WEKTOR3D_HH
 
+#include "SWektor.hh"
 
-#include "SMacierz.hh"
+class Wektor3D:public SWektor<double, 3>{
 
-using Wektor3D = SWektor<double, 3>;
-using Wektor2D = SWektor<double, 2>;
-using Macierz2x2 = SMacierz <double, 2>;
+public:
+    using SWektor::SWektor; //uzywa konstruktorow dla wektora
+    using SWektor::operator=;
+    Wektor3D(double x,double y,double z);
+};
 
 #endif

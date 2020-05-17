@@ -7,6 +7,7 @@
 template <typename STyp, int SWymiar>
 class SMacierz 
 {
+  protected:
   /*
   * tablica wektorow o rozmiarze ROZMIAR
   */
@@ -23,7 +24,8 @@ class SMacierz
     /*
     *  przeciazenie operatora mnozenia dla operacji macierz*wektor, zwracajaca wektor 
     */
-    SWektor<STyp,SWymiar> operator * (SWektor<STyp,SWymiar> We);
+    const SWektor<STyp,SWymiar> operator * (const SWektor<STyp,SWymiar> &We)const;
+    const SMacierz<STyp, SWymiar> operator *(const SMacierz<STyp, SWymiar> &W)const;
     /*
     * funkcja zwracajaca wyznacznik macierzy 
     */
@@ -49,7 +51,7 @@ SMacierz<STyp,SWymiar>::SMacierz()
     }
 
 template <typename STyp, int SWymiar>
-SWektor<STyp,SWymiar> SMacierz<STyp,SWymiar>::operator*(SWektor<STyp,SWymiar> We){
+const SWektor<STyp,SWymiar> SMacierz<STyp,SWymiar>::operator*(const SWektor<STyp,SWymiar> &We)const{
     SWektor<STyp,SWymiar> wynik;
     for(int i=0; i<SWymiar; i++){
         for(int j=0; j<SWymiar; j++){
@@ -58,6 +60,30 @@ SWektor<STyp,SWymiar> SMacierz<STyp,SWymiar>::operator*(SWektor<STyp,SWymiar> We
     }
     return wynik;
 }
+
+template<class STyp, int SWymiar>
+const SMacierz<STyp,SWymiar> SMacierz<STyp,SWymiar>::operator *(const SMacierz<STyp,SWymiar> &W)const
+{
+    SMacierz<STyp,SWymiar> tmp;
+    STyp tmp2;
+    tmp2 = 0;
+    for(int i=0;i<SWymiar;i++)
+    {
+        for(int j=0; j<SWymiar;j++)
+        {
+            for(int k=0;k<SWymiar;k++)
+            {
+                tmp2=tmp2+this->tab[j][k]*W[k][i];
+            }
+            tmp[j][i] = tmp2;
+            tmp2 = 0;
+            //tmp[i][j] = this->tab[j][0]*W[0][i]+this->tab[j][1]*W[1][i]+this->tab[j][2]*W[2][i];
+        }
+    }
+    return tmp;
+}
+
+
 
 template <typename STyp, int SWymiar>
 std::istream& operator >> (std::istream &Strm, SMacierz<STyp,SWymiar> &Mac)
@@ -123,5 +149,6 @@ SMacierz<STyp,SWymiar> SMacierz<STyp,SWymiar>::transpozycja(){
     }
     return *this;
 }
+
 
 #endif

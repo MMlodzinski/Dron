@@ -1,76 +1,65 @@
 #ifndef OBIEKTY_HH
 #define OBIEKTY_HH
 
-#include<vector>
-#include "wektor3D.hh"
+#define M_PI           3.14159265358979323846
 
-class Lamana
-{
-    std::vector<Wektor3D> _Wiersz;
+#include "Dr3D_gnuplot_api.hh"
+#include "Macierz.hh"
+#include "Wektor3D.hh"
+#include <string>
+#include <cmath>
+#include <vector>
 
-    public:
-
-    Wektor3D operator [](int Ind) const {return _Wiersz[Ind];}
-    Wektor3D & operator [] (int Ind) {return _Wiersz[Ind];}
-
-    void DodajWektor(Wektor3D Wek){ 
-        _Wiersz.push_back(Wek);
-    }
-
-    std::vector<Wektor3D> &DajWektor(){
-        return _Wiersz;
-    }
-
-    std::vector<Wektor3D> WezWektor(){
-        return _Wiersz;
-    }
-
-
-};
-
-std::istream& operator >> (std::istream &Str, Lamana &Przykladowa);
-
-std::ostream& operator << (std::ostream &Str, Lamana &Przykladowa);
+enum Axis{OX,OY,OZ};
 
 class ObiektRysowalny{
-std::vector<Lamana> _TabLamanych;
 
-    public:
+protected:
+    int id;
+    std::shared_ptr<drawNS::Draw3DAPI> drawingApi;
+    std::string kolor;
 
-    Lamana operator [](int Ind) const {return _TabLamanych[Ind];}
-    Lamana & operator [] (int Ind) {return _TabLamanych[Ind];}
-
-    void DodajLamana(Lamana Lam){ 
-        _TabLamanych.push_back(Lam);
-    }
-
-    std::vector<Lamana> &DajLamana(){
-        return _TabLamanych;
-    }
-
-    std::vector<Lamana> WezLamana()const{
-        return _TabLamanych;
-    }
+public:
+    virtual int Rysuj() = 0;
+    void ustawApi(std::shared_ptr<drawNS::Draw3DAPI> api);
+    void zmienKolor(std::string kolorObiektu);
+    ObiektRysowalny():id(-1){this->kolor = "black";}
 
 };
 
-std::istream& operator >> (std::istream &Str, ObiektRysowalny &Przykladowy);
 
-std::ostream& operator << (std::ostream &Str, ObiektRysowalny &Przykladowy);
 
-class Prostopadloscian: public ObiektRysowalny{
-std::vector<Lamana> _TabLamanych;
-    public:
+class Bryla:public ObiektRysowalny{
 
+protected:
+MacierzObrotu macierzObrotu;
+Wektor3D pozycjaSrodka;
+
+
+void Przenies(const Wektor3D & wektorPrzesuniecia);
+
+public:
+    Bryla();
+    virtual int Rysuj() = 0;
+    virtual void aktualizujPolozenie() = 0;
+    Bryla(const Wektor3D & pozycja);
+    void ObrocOKat(double alpha, Axis osObrotu);
+};
+
+class Prostopadloscian:public Bryla{
+
+protected:
+    double dlugosc;
+    double szerokosc;
+    double wysokosc;
+    std::vector<std::vector<drawNS::Point3D>> wierzcholki=std::vector<std::vector<drawNS::Point3D>>(2,std::vector<drawNS::Point3D>(4,drawNS::Point3D(0,0,0))); //2 poziomy po 4 punkty
+
+public:
+    int Rysuj() override;
+    void aktualizujPolozenie() override;
     Prostopadloscian();
-    void zapisz (std::ofstream plik, std::vector<Lamana> _TabLamanych);
+    Prostopadloscian(double dlugoscX,double dlugoscY, double wysokosc);
+
 };
-
-class Dron: public Prostopadloscian{
-    Prostopadloscian dron;
-    Dron();
-};
-
-
 
 #endif

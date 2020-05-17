@@ -1,45 +1,45 @@
 #include <iostream>
-#include <iomanip>
-#include "lacze_do_gnuplota.hh"
+#include "Obiekty.hh"
+#include "Macierz.hh"
+#include "Dr3D_gnuplot_api.hh"
+#include "Dron.hh"
 
-using namespace std;
+using std::vector;
+using std::cout;
+using drawNS::Point3D;
+using drawNS::APIGnuPlot3D;
 
 
 int main()
 {
-  PzG::LaczeDoGNUPlota  Lacze;
-  char c;
+    std::shared_ptr<drawNS::Draw3DAPI> api (new APIGnuPlot3D(-5,5,-5,5,-5,5,-1));        //nie dziala dla ref_time_ms dodatnich
+    Dron dron;
+    
+    dron.ustawPredkosc(8);
+    dron.ustawApi(api);
+    dron.Rysuj();
 
-  Lacze.DodajNazwePliku("bryly/prostopadloscian1.dat");
-  Lacze.ZmienTrybRys(PzG::TR_3D);
-  Lacze.Inicjalizuj();  // Tutaj startuje gnuplot.
+    do{
 
-  Lacze.UstawZakresX(-40, 100);
-  Lacze.UstawZakresY(-90, 90);
-  Lacze.UstawZakresZ(-20, 90);
+    }while(std::cin.get()!='\n');
 
+    dron.plynDoPrzodu(2);
 
-  Lacze.UstawRotacjeXZ(40,60); // Tutaj ustawiany jest widok
+    do{
 
-  Lacze.Rysuj();        // Teraz powinno pojawic sie okienko gnuplota
-                        // z rysunkiem, o ile istnieje plik "prostopadloscian1.dat"
-  cout << "Nacisnij ENTER, aby zobaczyc prostopadloscian nr 2 ... " << flush;
-  cin >> noskipws >> c;
+    }while(std::cin.get()!='\n');
 
-  Lacze.UsunWszystkieNazwyPlikow();
-  Lacze.DodajNazwePliku("bryly/prostopadloscian2.dat");
-  Lacze.Rysuj();        // Teraz powinno pojawic sie okienko gnuplota
-                        // z rysunkiem, o ile istnieje plik "prostopadloscian2.dat"
+    dron.obroc(30, OX);
 
-  cout << "Nacisnij ENTER, aby zobaczyc prostopadloscian nr 3 ... " << flush;
-  cin >> noskipws >> c;
+    do{
 
-  Lacze.UsunWszystkieNazwyPlikow();
-  Lacze.DodajNazwePliku("bryly/prostopadloscian3.dat");
-  Lacze.Rysuj();        // Teraz powinno pojawic sie okienko gnuplota
-                        // z rysunkiem, o ile istnieje plik "prostopadloscian3.dat"
+    }while(std::cin.get()!='\n');
 
-  cout << "Nacisnij ENTER, aby zakonczyc ... " << flush;
-  cin >> noskipws >> c;
+    dron.plynDoPrzodu(2,90);
 
+    do{
+
+    }while(std::cin.get()!='\n');
+
+return 0;
 }

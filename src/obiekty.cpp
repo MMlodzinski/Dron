@@ -1,82 +1,78 @@
-#include<fstream>
-#include "obiekty.hh"
+#include "Obiekty.hh"
 
-std::istream& operator >> (std::istream &Str, Lamana &Przykladowa){
-    
-    Str.clear();
-    Wektor3D Wek;
-    /*
-    for( int i=0; i<4 && Str.good(); i++)
+void ObiektRysowalny::ustawApi(std::shared_ptr<drawNS::Draw3DAPI> api){
+    drawingApi = api;
+}
+
+void ObiektRysowalny::zmienKolor(std::string kolorObiektu){
+    this->kolor = kolorObiektu;
+}
+
+void Bryla::ObrocOKat(double katWStopniach, Axis osObrotu){
+double alpha = -M_PI*katWStopniach/180;
+    switch(osObrotu){
+        case OX:
+            this->macierzObrotu = this->macierzObrotu * MacierzObrotu(Wektor3D(1,0,0),Wektor3D(0,std::cos(alpha),-std::sin(alpha)),Wektor3D(0,std::sin(alpha),std::cos(alpha)));
+        break;
+
+        case OY:
+            this->macierzObrotu =  this->macierzObrotu * MacierzObrotu(Wektor3D(std::cos(alpha),0,std::sin(alpha)),Wektor3D(0,1,0),Wektor3D(-std::sin(alpha),0,std::cos(alpha)));
+        break;
+
+        case OZ:
+            this->macierzObrotu = this->macierzObrotu * MacierzObrotu(Wektor3D(std::cos(alpha),-std::sin(alpha),0),Wektor3D(std::sin(alpha),std::cos(alpha),0),Wektor3D(0,0,1));
+        break;
+    }
+}
+
+
+
+void Bryla::Przenies(const Wektor3D & wektorPrzesuniecia){
+    this->pozycjaSrodka = this->pozycjaSrodka + wektorPrzesuniecia;
+}
+
+Bryla::Bryla(const Wektor3D & pozycja){
+    this->pozycjaSrodka = pozycja;
+}
+
+Bryla::Bryla(){
+    this->pozycjaSrodka = Wektor3D();
+    this->macierzObrotu = MacierzObrotu();
+}
+
+int Prostopadloscian::Rysuj(){
+    this->aktualizujPolozenie();
+    if(this->id>=0)
     {
-        if(!(Str >> Wek)){Str.setstate(std::ios::failbit);}
-        else Przykladowa.DajWektor().push_back(Wek);
-    }
-    */
-   char c;
-   
-   do
-   {    
-        if(!(Str >> Wek)){Str.setstate(std::ios::failbit);}
-        else Przykladowa.DajWektor().push_back(Wek);
-        Str.get(c);
-        if(c!='#') Str.unget();
-        
-   }while (Str.good() && c!='#');
-
-    return Str;
-}
-
-std::ostream& operator << (std::ostream &Str, Lamana &Przykladowa){
-
-    for(Wektor3D& Wsp : Przykladowa.WezWektor()){
-        Str << Wsp;
-        
+        drawingApi->erase_shape(this->id);
     }
 
-    
-    return Str;
+    this->id = drawingApi->draw_polyhedron(this->wierzcholki,this->kolor);
+    drawingApi->redraw();
+    return this->id;
 }
 
-std::istream& operator >> (std::istream &Str, ObiektRysowalny &Przykladowy){
+void Prostopadloscian::aktualizujPolozenie(){
+    this->wierzcholki[0][0]= (macierzObrotu*Wektor3D(-szerokosc/2,-dlugosc/2,-wysokosc/2)+this->pozycjaSrodka);
+    this->wierzcholki[0][1]= (macierzObrotu*Wektor3D(-szerokosc/2, dlugosc/2,-wysokosc/2)+this->pozycjaSrodka);
+    this->wierzcholki[0][2]= (macierzObrotu*Wektor3D( szerokosc/2, dlugosc/2,-wysokosc/2)+this->pozycjaSrodka);
+    this->wierzcholki[0][3]= (macierzObrotu*Wektor3D( szerokosc/2,-dlugosc/2,-wysokosc/2)+this->pozycjaSrodka);
 
-    char c;
-    Str.clear();
-    while( !Str.eof() && Str.good())
-    {   Lamana Lam;
-
-
-
-        if(Str >> Lam){Przykladowy.DajLamana().push_back(Lam);}
-    }
-    
-    return Str; 
+    this->wierzcholki[1][0]= (macierzObrotu*Wektor3D(-szerokosc/2,-dlugosc/2,wysokosc/2)+this->pozycjaSrodka);
+    this->wierzcholki[1][1]= (macierzObrotu*Wektor3D(-szerokosc/2, dlugosc/2,wysokosc/2)+this->pozycjaSrodka);
+    this->wierzcholki[1][2]= (macierzObrotu*Wektor3D( szerokosc/2, dlugosc/2,wysokosc/2)+this->pozycjaSrodka);
+    this->wierzcholki[1][3]= (macierzObrotu*Wektor3D( szerokosc/2,-dlugosc/2,wysokosc/2)+this->pozycjaSrodka);
 }
 
-std::ostream& operator << (std::ostream &Str, ObiektRysowalny &Przykladowy){
-
-    for(Lamana& Wsp : Przykladowy.WezLamana()){
-        Str << Wsp; 
-        Str << std::endl;
-    }
-
-    return Str;
-}
-
-void Prostopadloscian::zapisz(std::ofstream plik, std::vector<Lamana> _TabLamanych){
-    plik.open("prostopadloscian.dat");
-    
-    for(int j=0;j<6;j++){
-        for(int i=0;i<4;i++){plik<<_TabLamanych[i]<<"\n";}
-        plik<<"#";
-    }
-
-    plik.close();
-}
 
 Prostopadloscian::Prostopadloscian(){
-    std::vector<Wektor3D> _Wiersz;
+    this->szerokosc=2;
+    this->wysokosc=2;
+    this->dlugosc=3;
+}
 
-    for(int i=0;i<4;i++){
-        
-    }
+Prostopadloscian::Prostopadloscian(double dlugoscX,double dlugoscY, double wysokosc){
+    this->szerokosc = dlugoscX;
+    this->dlugosc = dlugoscY;
+    this->wysokosc = wysokosc;
 }
