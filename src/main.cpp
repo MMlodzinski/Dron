@@ -9,7 +9,7 @@ using std::cout;
 using drawNS::Point3D;
 using drawNS::APIGnuPlot3D;
 
-
+//main tylko do testowania na razie
 int main()
 {
     std::shared_ptr<drawNS::Draw3DAPI> api (new APIGnuPlot3D(-5,5,-5,5,-5,5,-1));        //nie dziala dla ref_time_ms dodatnich
