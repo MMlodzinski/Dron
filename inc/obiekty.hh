@@ -70,10 +70,10 @@ protected:
     double wysokosc;
     std::vector<std::vector<drawNS::Point3D>> punkty=std::vector<std::vector<drawNS::Point3D>>(22,std::vector<drawNS::Point3D>(2,drawNS::Point3D(0,0,-5)));
 public:
-    virtual int Rysuj()=0;
+    int Rysuj();
     Plaszczyzna();
     Plaszczyzna(const Wektor3D & pozycja);
-    void Ustaw();
+    virtual void Ustaw()=0;
 };
 
 class Dno:public Plaszczyzna{
@@ -81,14 +81,15 @@ public:
     
     Dno();
     Dno(double dlugoscX,double dlugoscY);
-    int Rysuj() override;
+    void Ustaw()override;
 };
 
 class PowierzchniaWody:public Plaszczyzna{
 public:
 
     PowierzchniaWody();
-    int Rysuj() override;
+    PowierzchniaWody(double dlugoscX,double dlugoscY);
+    void Ustaw()override;
 };
 
 #endif

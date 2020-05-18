@@ -86,7 +86,7 @@ Plaszczyzna::Plaszczyzna(){
 }
 
 
-void Plaszczyzna::Ustaw(){
+void Dno::Ustaw(){
     int i;
 
     for(i=0;i<11;i++){
@@ -100,7 +100,7 @@ void Plaszczyzna::Ustaw(){
     }
 }
 
-int Dno::Rysuj(){
+int Plaszczyzna::Rysuj(){
     this->Ustaw();
     if(this->id>=0)
     {
@@ -122,4 +122,20 @@ PowierzchniaWody::PowierzchniaWody(){
     this->szerokosc=10;
     this->dlugosc=10;
     this->wysokosc=10;
+}
+
+void PowierzchniaWody::Ustaw(){
+    int i;
+
+    for(i=0;i<11;i++){
+        this->punkty[i][0]= Wektor3D(-szerokosc/2+i,-dlugosc/2,wysokosc/2);
+        this->punkty[i][1]= Wektor3D(-szerokosc/2+i,-dlugosc/2+1,wysokosc/2-0.5);
+        this->punkty[i+11][0]= Wektor3D(-szerokosc/2+i,-dlugosc/2,wysokosc/2);
+        this->punkty[i+11][1]= Wektor3D(-szerokosc/2+i,-dlugosc/2+1,wysokosc/2-0.5);
+    }
+
+    /*for(i=0;i<11;i++){
+        this->punkty[i+11][0]= Wektor3D(-szerokosc/2,-dlugosc/2+i,wysokosc/2);
+        this->punkty[i+11][1]= Wektor3D(szerokosc/2,-dlugosc/2+i,wysokosc/2);
+    }*/
 }
