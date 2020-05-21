@@ -68,7 +68,7 @@ protected:
     double szerokosc;
     double dlugosc;
     double wysokosc;
-    std::vector<std::vector<drawNS::Point3D>> punkty=std::vector<std::vector<drawNS::Point3D>>(22,std::vector<drawNS::Point3D>(2,drawNS::Point3D(0,0,-5)));
+    std::vector<std::vector<drawNS::Point3D>> punkty;
 public:
     int Rysuj();
     Plaszczyzna();
@@ -90,6 +90,19 @@ public:
     PowierzchniaWody();
     PowierzchniaWody(double dlugoscX,double dlugoscY);
     void Ustaw()override;
+};
+
+class Graniastoslup:public Bryla{
+protected:
+    double dlugosc;
+    double wysokosc;
+    std::vector<std::vector<drawNS::Point3D>> wierzcholki=std::vector<std::vector<drawNS::Point3D>>(2,std::vector<drawNS::Point3D>(6,drawNS::Point3D(0,0,0))); //2 poziomy po 6 punktów
+
+public:
+    int Rysuj() override;
+    void aktualizujPolozenie() override;
+    Graniastoslup();
+
 };
 
 #endif
