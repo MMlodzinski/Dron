@@ -9,6 +9,7 @@
 #include <string>
 #include <cmath>
 #include <vector>
+# include "Ustawienia.h"
 
 enum Axis{OX,OY,OZ};
 
@@ -32,18 +33,20 @@ public:
 class Bryla:public ObiektRysowalny{
 
 protected:
-MacierzObrotu macierzObrotu;
-Wektor3D pozycjaSrodka;
 
 
-void Przenies(const Wektor3D & wektorPrzesuniecia);
+
+
 
 public:
+MacierzObrotu macierzObrotu;
+Wektor3D pozycjaSrodka;
     Bryla();
     virtual int Rysuj() = 0;
     virtual void aktualizujPolozenie() = 0;
     Bryla(const Wektor3D & pozycja);
     void ObrocOKat(double alpha, Axis osObrotu);
+    void Przenies(const Wektor3D & wektorPrzesuniecia);
 };
 
 class Prostopadloscian:public Bryla{
@@ -96,9 +99,11 @@ class Graniastoslup:public Bryla{
 protected:
     double dlugosc;
     double wysokosc;
-    std::vector<std::vector<drawNS::Point3D>> wierzcholki=std::vector<std::vector<drawNS::Point3D>>(2,std::vector<drawNS::Point3D>(6,drawNS::Point3D(0,0,0))); //2 poziomy po 6 punktów
+    std::vector<std::vector<drawNS::Point3D>> wierzcholki=std::vector<std::vector<drawNS::Point3D>>(2,std::vector<drawNS::Point3D>(6,drawNS::Point3D(0,0,0)));
+     //2 poziomy po 6 punktów
 
 public:
+
     int Rysuj() override;
     void aktualizujPolozenie() override;
     Graniastoslup();

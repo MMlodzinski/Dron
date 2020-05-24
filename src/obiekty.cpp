@@ -10,18 +10,18 @@ void ObiektRysowalny::zmienKolor(std::string kolorObiektu){
 }
 
 void Bryla::ObrocOKat(double katWStopniach, Axis osObrotu){
-double alpha = -M_PI*katWStopniach/180;
+double kat = -M_PI*katWStopniach/180;
     switch(osObrotu){
         case OX:
-            this->macierzObrotu = this->macierzObrotu * MacierzObrotu(Wektor3D(1,0,0),Wektor3D(0,std::cos(alpha),-std::sin(alpha)),Wektor3D(0,std::sin(alpha),std::cos(alpha)));
+            this->macierzObrotu = this->macierzObrotu * MacierzObrotu(Wektor3D(1,0,0),Wektor3D(0,std::cos(kat),-std::sin(kat)),Wektor3D(0,std::sin(kat),std::cos(kat)));
         break;
 
         case OY:
-            this->macierzObrotu =  this->macierzObrotu * MacierzObrotu(Wektor3D(std::cos(alpha),0,std::sin(alpha)),Wektor3D(0,1,0),Wektor3D(-std::sin(alpha),0,std::cos(alpha)));
+            this->macierzObrotu =  this->macierzObrotu * MacierzObrotu(Wektor3D(std::cos(kat),0,std::sin(kat)),Wektor3D(0,1,0),Wektor3D(-std::sin(kat),0,std::cos(kat)));
         break;
 
         case OZ:
-            this->macierzObrotu = this->macierzObrotu * MacierzObrotu(Wektor3D(std::cos(alpha),-std::sin(alpha),0),Wektor3D(std::sin(alpha),std::cos(alpha),0),Wektor3D(0,0,1));
+            this->macierzObrotu = this->macierzObrotu * MacierzObrotu(Wektor3D(std::cos(kat),-std::sin(kat),0),Wektor3D(std::sin(kat),std::cos(kat),0),Wektor3D(0,0,1));
         break;
     }
 }
@@ -67,9 +67,9 @@ void Prostopadloscian::aktualizujPolozenie(){
 
 
 Prostopadloscian::Prostopadloscian(){
-    this->szerokosc=2;
-    this->wysokosc=2;
-    this->dlugosc=3;
+    this->szerokosc=SZEROKOSC_KORPUSU;
+    this->wysokosc=WYSOKOSC_KORPUSU;
+    this->dlugosc=DLUGOSC_KORPUSU;
 }
 
 Prostopadloscian::Prostopadloscian(double dlugoscX,double dlugoscY, double wysokosc){
@@ -114,16 +114,16 @@ int Plaszczyzna::Rysuj(){
 }
 
 Dno::Dno(){
-    this->szerokosc=10;
-    this->dlugosc=10;
-    this->wysokosc=10;
+    this->szerokosc=DLUGOSC_DNA;
+    this->dlugosc=DLUGOSC_DNA;
+    this->wysokosc=DLUGOSC_DNA;
     this->punkty=std::vector<std::vector<drawNS::Point3D>>(22,std::vector<drawNS::Point3D>(2,drawNS::Point3D(0,0,-wysokosc/2)));
 }
 
 PowierzchniaWody::PowierzchniaWody(){
-    this->szerokosc=10;
-    this->dlugosc=10;
-    this->wysokosc=10;
+    this->szerokosc=DLUGOSC_DNA;
+    this->dlugosc=DLUGOSC_DNA;
+    this->wysokosc=DLUGOSC_DNA;
     this->punkty=std::vector<std::vector<drawNS::Point3D>>(11,std::vector<drawNS::Point3D>(12,drawNS::Point3D(0,0,wysokosc/2)));
 }
 
@@ -173,6 +173,6 @@ void Graniastoslup::aktualizujPolozenie(){
 
 
 Graniastoslup::Graniastoslup(){
-    this->wysokosc=2;
-    this->dlugosc=1;
+    this->wysokosc=WYSOKOSC_WIRNIKA;
+    this->dlugosc=DLUGOSC_WIRNIKA;
 }

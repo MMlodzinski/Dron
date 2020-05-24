@@ -35,13 +35,13 @@ int main()
 
     }while(std::cin.get()!='\n');
 
-    dron.obroc(30, OX);
+    dron.obroc(90, OZ);
 
     do{
 
     }while(std::cin.get()!='\n');
 
-    dron.plynDoPrzodu(2,90);
+    dron.plynDoPrzodu(2,40);
 
     do{
 

@@ -12,7 +12,10 @@ void Dron::plynDoPrzodu(double odleglosc){
         elapsedTime = endMeasuring - beginMeasuring;
         }while(elapsedTime.count()<0.01);
         //std::cout<<"HKKK\n";
-        this->pozycjaSrodka = this->pozycjaSrodka + (this->macierzObrotu*Wektor3D(0,odleglosc*elapsedTime.count(),0));
+        this->korpus.pozycjaSrodka = this->korpus.pozycjaSrodka + (this->korpus.macierzObrotu*Wektor3D(0,odleglosc*elapsedTime.count(),0));
+        this->wirnikL.pozycjaSrodka = this->wirnikL.pozycjaSrodka + (this->wirnikL.macierzObrotu*Wektor3D(0,odleglosc*elapsedTime.count(),0));
+        wirnikL.ObrocOKat(45, OY);
+        wirnikP.ObrocOKat(45, OY);
         deltaTime+=elapsedTime.count();
         this->Rysuj();
     }while(deltaTime*this->predkosc<odleglosc);
@@ -21,19 +24,49 @@ void Dron::plynDoPrzodu(double odleglosc){
 }
 
 void Dron::plynDoPrzodu(double odleglosc, double katWznoszenia){
-    MacierzObrotu tmp = this->macierzObrotu;
-    this->ObrocOKat(-katWznoszenia,OX);
+    MacierzObrotu tmp = this->korpus.macierzObrotu;
+    MacierzObrotu tmp2 = this->wirnikL.macierzObrotu;
+    this->korpus.ObrocOKat(-katWznoszenia,OX);
+    this->wirnikL.ObrocOKat(-katWznoszenia,OX);
+    this->wirnikP.ObrocOKat(-katWznoszenia,OX);
     this->plynDoPrzodu(odleglosc);
-    this->macierzObrotu = tmp;
+    this->korpus.macierzObrotu = tmp;
+    this->wirnikL.macierzObrotu = tmp2;
+    this->wirnikP.macierzObrotu = tmp2;
     this->Rysuj();
 }
 
 void Dron::obroc(double katObrotu, Axis os){
-    this->ObrocOKat(katObrotu, os);
+    this->korpus.ObrocOKat(katObrotu, os);
+    this->wirnikL.ObrocOKat(katObrotu, os);
+    this->wirnikP.ObrocOKat(katObrotu, os);
     this->Rysuj();
 }
 
 
 void Dron::ustawPredkosc(double predkoscDrona){
     this->predkosc = predkoscDrona;
+}
+
+int Dron::Rysuj(){
+    this->wirnikL.pozycjaSrodka = this->korpus.pozycjaSrodka + (this->korpus.macierzObrotu*Wektor3D(-0.5,-1.75,0));
+    
+    this->wirnikP.pozycjaSrodka = this->korpus.pozycjaSrodka + (this->korpus.macierzObrotu*Wektor3D(0.5,-1.75,0));
+    
+    korpus.Rysuj();
+    wirnikL.Rysuj();
+    wirnikP.Rysuj();
+}
+
+Dron::Dron(){
+    wirnikL.ObrocOKat(90, OX);
+    wirnikP.ObrocOKat(90, OX);
+    
+    
+}
+
+void Dron::ustawApi(std::shared_ptr<drawNS::Draw3DAPI> api){
+    this->korpus.ustawApi(api);
+    this->wirnikL.ustawApi(api);
+    this->wirnikP.ustawApi(api);
 }

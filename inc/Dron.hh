@@ -13,9 +13,11 @@ public:
 };
 
 
-class Dron:public Prostopadloscian,public InterfejsDrona{
+class Dron:protected Prostopadloscian, protected Graniastoslup, public InterfejsDrona{
 
 protected:
+Prostopadloscian korpus;
+Graniastoslup wirnikL, wirnikP;
 double predkosc;
 
 public:
@@ -23,8 +25,9 @@ public:
     void plynDoPrzodu(double odleglosc)override;
     void obroc(double katObrotu, Axis os)override;
     void ustawPredkosc(double predkoscDrona);
-
-    using Prostopadloscian::Prostopadloscian;
+    int Rysuj()override;
+    Dron();
+    void ustawApi(std::shared_ptr<drawNS::Draw3DAPI> api);
 };
 
 
