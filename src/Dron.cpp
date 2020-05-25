@@ -11,7 +11,6 @@ void Dron::plynDoPrzodu(double odleglosc){
         endMeasuring = std::chrono::steady_clock::now();
         elapsedTime = endMeasuring - beginMeasuring;
         }while(elapsedTime.count()<0.01);
-        //std::cout<<"HKKK\n";
         this->korpus.pozycjaSrodka = this->korpus.pozycjaSrodka + (this->korpus.macierzObrotu*Wektor3D(0,odleglosc*elapsedTime.count(),0));
         this->wirnikL.pozycjaSrodka = this->wirnikL.pozycjaSrodka + (this->wirnikL.macierzObrotu*Wektor3D(0,odleglosc*elapsedTime.count(),0));
         wirnikL.ObrocOKat(45, OY);
