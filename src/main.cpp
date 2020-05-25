@@ -35,7 +35,7 @@ int main()
 
     }while(std::cin.get()!='\n');
 
-    dron.obroc(90, OZ);
+    dron.obroc(360, OZ);
 
     do{
 
