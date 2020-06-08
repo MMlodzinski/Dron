@@ -1,5 +1,11 @@
 #include "Dron.hh"
 
+void Dron::zmienKolor(std::string kolorObiektu){
+    this->korpus.zmienKolor(kolorObiektu);
+    this->wirnikL.zmienKolor(kolorObiektu);
+    this->wirnikP.zmienKolor(kolorObiektu);
+}
+
 void Dron::plynDoPrzodu(double odleglosc){
     double deltaTime=0;
     std::chrono::steady_clock::time_point beginMeasuring;
@@ -33,6 +39,8 @@ void Dron::plynDoPrzodu(double odleglosc, double katWznoszenia){
     this->wirnikL.macierzObrotu = tmp2;
     this->wirnikP.macierzObrotu = tmp2;
     this->Rysuj();
+
+    
 }
 
 void Dron::obroc(double katObrotu, Axis os){
@@ -61,11 +69,22 @@ Dron::Dron(){
     wirnikL.ObrocOKat(90, OX);
     wirnikP.ObrocOKat(90, OX);
     
-    
 }
 
 void Dron::ustawApi(std::shared_ptr<drawNS::Draw3DAPI> api){
     this->korpus.ustawApi(api);
     this->wirnikL.ustawApi(api);
     this->wirnikP.ustawApi(api);
+}
+
+double Dron::promien(){
+    return Wektor3D(DLUGOSC_KORPUSU+WYSOKOSC_WIRNIKA, SZEROKOSC_KORPUSU, WYSOKOSC_KORPUSU).dlugosc()/2;
+}
+
+Wektor3D Dron::pozycja(){
+    return Wektor3D((DLUGOSC_KORPUSU+WYSOKOSC_WIRNIKA)/2, SZEROKOSC_KORPUSU/2, WYSOKOSC_KORPUSU/2);
+}
+
+bool Dron::czyKolizja(std::shared_ptr<InterfejsDrona> dron){
+    return (this->promien()+dron->promien()>=(this->pozycja()-dron->pozycja()).dlugosc());
 }

@@ -4,16 +4,10 @@
 #include "Obiekty.hh"
 #include <chrono>
 
-class InterfejsDrona{
-
-public:
-    virtual void plynDoPrzodu(double odleglosc,double katWznoszenia)=0;
-    virtual void plynDoPrzodu(double odleglosc)=0;
-    virtual void obroc(double katObrotu, Axis os)=0;
-};
 
 
-class Dron:protected Prostopadloscian, protected Graniastoslup, public InterfejsDrona{
+
+class Dron:protected Prostopadloscian, protected Graniastoslup, public InterfejsDrona, public InterfejsPrzeszkody{
 
 protected:
 Prostopadloscian korpus;
@@ -28,6 +22,10 @@ public:
     int Rysuj()override;
     Dron();
     void ustawApi(std::shared_ptr<drawNS::Draw3DAPI> api);
+    double promien()override;
+    Wektor3D pozycja()override;
+    bool czyKolizja(std::shared_ptr<InterfejsDrona> dron)override;
+    void zmienKolor(std::string kolorObiektu);
 };
 
 

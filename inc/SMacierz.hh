@@ -26,10 +26,11 @@ class SMacierz
     */
     const SWektor<STyp,SWymiar> operator * (const SWektor<STyp,SWymiar> &We)const;
     const SMacierz<STyp, SWymiar> operator *(const SMacierz<STyp, SWymiar> &W)const;
+    const SMacierz<STyp,SWymiar> operator *(const STyp l)const;
     /*
     * funkcja zwracajaca wyznacznik macierzy 
     */
-    STyp wyznacznik();
+    const double wyznacznik()const;
     /*
     * metoda zamieniajaca wybrana z kolumn macierzy na podany wektor
     */
@@ -38,6 +39,9 @@ class SMacierz
     * metoda - transpozycja macierzy
     */
     SMacierz<STyp,SWymiar> transpozycja();
+    double dopelnienieAlgebraiczne(int i, int j) const;
+    const SMacierz<STyp,SWymiar> macierzDopelnien() const;
+    const SMacierz<STyp,SWymiar> odwrotnosc() const;
 };
 
 template <typename STyp, int SWymiar>
@@ -83,6 +87,19 @@ const SMacierz<STyp,SWymiar> SMacierz<STyp,SWymiar>::operator *(const SMacierz<S
     return tmp;
 }
 
+template<class STyp, int SWymiar>
+const SMacierz<STyp,SWymiar> SMacierz<STyp,SWymiar>::operator *(const STyp l)const{
+    SMacierz<STyp,SWymiar> tmp;
+    for(int i=0;i<SWymiar;i++)
+    {
+        for(int j=0;j<SWymiar;j++)
+        {
+            tmp[i][j]=this->tab[i][j]*l;
+        }
+    }
+    return tmp;
+}
+
 
 
 template <typename STyp, int SWymiar>
@@ -104,7 +121,7 @@ std::ostream& operator << (std::ostream &Strm, const SMacierz<STyp,SWymiar> &Mac
 }
 
 template <typename STyp, int SWymiar>
-STyp SMacierz<STyp,SWymiar>::wyznacznik(){
+const double SMacierz<STyp,SWymiar>::wyznacznik()const{
      double det;
      SMacierz<STyp,SWymiar> Ma;
      for(int i=0; i<SWymiar; i++){
@@ -148,6 +165,50 @@ SMacierz<STyp,SWymiar> SMacierz<STyp,SWymiar>::transpozycja(){
         }
     }
     return *this;
+}
+
+template<class STyp, int SWymiar>
+double SMacierz<STyp,SWymiar>::dopelnienieAlgebraiczne(int i, int j) const{
+    SMacierz<STyp,SWymiar-1> macierz;
+    int a=0,b=0;
+    for(int k=0;k<SWymiar-1;k++)
+    {
+        if(k==i)
+            a=1;
+        for(int l=0;l<SWymiar-1;l++)
+        {
+            if(l==j)
+                b=1;
+            macierz[l][k]=this->tab[k+a][l+b];
+        }
+        b=0;
+    }
+    if((i+j)%2==0)
+        return macierz.wyznacznik();
+    else
+        return macierz.wyznacznik()*(-1);
+}
+
+template<class STyp, int SWymiar>
+const SMacierz<STyp,SWymiar> SMacierz<STyp,SWymiar>::macierzDopelnien() const{
+    SMacierz<STyp,SWymiar> tmp;
+    for(int i=0;i<SWymiar;i++)
+    {
+        for(int j=0;j<SWymiar;j++)
+        {
+            tmp[i][j]=dopelnienieAlgebraiczne(i,j);
+        }
+    }
+    return tmp;
+}
+
+template<class STyp, int SWymiar>
+const SMacierz<STyp,SWymiar> SMacierz<STyp,SWymiar>::odwrotnosc() const{
+    SMacierz<STyp,SWymiar> tmp;
+    tmp=this->macierzDopelnien();
+    tmp.transpozycja();
+    tmp=tmp*(1/this->wyznacznik());
+    return tmp;
 }
 
 
